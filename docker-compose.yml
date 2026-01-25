@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  edge-reader:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PAPERS_ROOT=/app/papers
+      - PAPERS_CHAT_DIR=/app/papers/chat
+      - ENVIRONMENT=development
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./papers:/app/papers
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

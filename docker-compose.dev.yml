@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  # =========================
+  # Database (PostgreSQL)
+  # =========================
+  db:
+    image: postgres:15
+    container_name: edge_reader_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: edge_reader
+      POSTGRES_USER: edge
+      POSTGRES_PASSWORD: edgepass
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edge"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # =========================
+  # OPC UA Simulator
+  # =========================
+  opcua-sim:
+    image: mcr.microsoft.com/iotedge/opc-plc:latest
+    container_name: opcua_sim
+    command: >
+      --accept-license
+      --autoaccept
+      --pn=50000
+      --fn=5
+      --ut
+    ports:
+      - "4840:4840"
+    restart: unless-stopped
+
+  # =========================
+  # Backend API (FastAPI)
+  # =========================
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: edge_reader_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      opcua-sim:
+        condition: service_started
+    env_file:
+      - .env
+    environment:
+      DB_DSN: postgresql+psycopg://edge:edgepass@db:5432/edge_reader
+      ENV: development
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./apps/api:/app
+      - /app/__pycache__
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+
+  # =========================
+  # Frontend (React + Vite)
+  # =========================
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: edge_reader_web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+    command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  db_data:

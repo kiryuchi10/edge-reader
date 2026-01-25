@@ -1,0 +1,16 @@
+rag:
+  chunk_size: 800
+  top_k: 5
+  similarity_threshold: 0.1
+  
+indexing:
+  papers_root: "/app/papers"
+  supported_formats: ["pdf"]
+  
+retrieval:
+  max_results: 10
+  min_score: 0.0
+  
+response:
+  max_length: 1000
+  temperature: 0.7

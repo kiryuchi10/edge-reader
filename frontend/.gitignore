@@ -1,0 +1,201 @@
+# ============================================
+# Edge Reader - .gitignore
+# ============================================
+
+# ============================================
+# Security & Environment Variables
+# ============================================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.cert
+secrets/
+credentials/
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+pip-wheel-metadata/
+MANIFEST
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+
+# ============================================
+# Virtual Environments
+# ============================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ============================================
+# Node.js / Frontend
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm
+.eslintcache
+.stylelintcache
+.parcel-cache
+.next/
+out/
+.vite/
+*.tsbuildinfo
+
+# (If you build frontend into these folders, ignore them)
+dist/
+build/
+
+# ============================================
+# Documentation (do NOT publish internal docs)
+# ============================================
+
+# Ignore ALL markdown by default...
+*.md
+
+# ...but keep main public docs
+!README.md
+!QUICK_START.md
+
+# Ignore docs markdown, except docs/README.md
+docs/**/*.md
+!docs/README.md
+
+# If you want to keep other public docs, whitelist them like:
+# !docs/GettingStarted.md
+
+# Ignore internal root-level docs you don't want public
+IMPLEMENTATION_SUMMARY.md
+IMPLEMENTATION_PLAN.md
+README_HARDWARE.md
+README_ML_Workflow.md
+ENHANCEMENTS.md
+NEXT_STEPS.md
+
+# ============================================
+# Dev Reports & Logs
+# ============================================
+dev-reports/
+logs/
+log/
+*.log
+*.log.*
+*.out
+
+# ============================================
+# Data & Outputs (usually not in repo)
+# ============================================
+papers/
+data/
+datasets/
+outputs/
+models/
+weights/
+checkpoints/
+runs/
+
+*.pkl
+*.h5
+*.ckpt
+*.pt
+*.pth
+*.onnx
+
+# ============================================
+# Docker (local volumes)
+# ============================================
+docker/data/
+docker/volumes/
+docker-compose.override.yml
+
+# NOTE: usually you DO want .dockerignore in the repo, so don't ignore it.
+# Remove this line if you accidentally added it before:
+# .dockerignore
+
+# ============================================
+# IDE & Editor Files
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+.project
+.classpath
+.settings/
+
+# ============================================
+# OS Files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============================================
+# Temp & Cache
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.backup
+.cache/
+.temp/
+tmp/
+temp/
+
+# ============================================
+# Database
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# ============================================
+# Jupyter
+# ============================================
+.ipynb_checkpoints/
+*.ipynb
+
+# ============================================
+# ML Tracking
+# ============================================
+wandb/
+mlruns/
+.neptune/
+tensorboard/
+lightning_logs/
